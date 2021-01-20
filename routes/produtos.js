@@ -18,13 +18,13 @@ router.get('/', (req, res, next) => {
                         return {
                             id_produto: prod.id_produto,
                             nome: prod.nome,
-                            preco: prod.preco,
-                            request: {
-                                tipo: 'GET',
-                                descricao: 'Retorna todos os produtos'
-                            }
+                            preco: prod.preco
                         }
-                    })
+                    }), 
+                    request: {
+                        tipo: 'GET',
+                        descricao: 'Retorna todos os produtos'
+                    }
                 }
 
                 return res.status(200).send(response);
@@ -134,7 +134,7 @@ router.delete('/', (req, res, next) => {
         conn.query(
             'DELETE FROM produtos WHERE id_produto = ?',
             [req.body.id],
-            (error, resultado, fields) => {
+            (error, result, fields) => {
                 conn.release();
 
                 if (error) { return res.status(500).send({ error }) }
