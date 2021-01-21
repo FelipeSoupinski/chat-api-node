@@ -36,4 +36,8 @@ router.get('/:id', ProdutosController.getProduto);
 router.patch('/', login.obrigatorio, upload.single('imagem_produto'), ProdutosController.updateProduto);
 router.delete('/', login.obrigatorio, ProdutosController.deleteProdutos);
 
+router.post('/:id_produto/imagem', login.obrigatorio, upload.single('imagem_produto'), ProdutosController.postImagem)
+router.get('/:id_produto/imagens', ProdutosController.getImagens);
+router.delete('/:id_produto/imagens', login.obrigatorio, ProdutosController.deleteImagemProdutos);
+
 module.exports = router;

@@ -31,7 +31,7 @@ exports.getPedidos = async (req, res, next) => {
 exports.postPedidos = async (req, res, next) => {
     try {
         const produto = await mysql.execute(
-            "SELECT * from produtos WHERE id_produto = ?",
+            "SELECT * from produtos WHERE id_produto = ?;",
             [req.body.id_produto]
         );
         if (produto.length == 0) {
