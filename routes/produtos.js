@@ -33,7 +33,7 @@ const upload = multer({
 router.get('/', ProdutosController.getProdutos);
 router.post('/', login.obrigatorio, upload.single('imagem_produto'), ProdutosController.postProdutos);
 router.get('/:id', ProdutosController.getProduto);
-router.patch('/:id', login.obrigatorio, upload.single('imagem_produto'), ProdutosController.updateProduto);
+router.patch('/', login.obrigatorio, upload.single('imagem_produto'), ProdutosController.updateProduto);
 router.delete('/', login.obrigatorio, ProdutosController.deleteProdutos);
 
 module.exports = router;
