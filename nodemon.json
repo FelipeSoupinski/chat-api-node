@@ -2,8 +2,10 @@
     "env": {
         "MYSQL_USER": "root",
         "MYSQL_PASSWORD": "",
-        "MYSQL_DATABASE": "login",
+        "MYSQL_DATABASE": "api_node",
         "MYSQL_HOST": "localhost",
-        "MYSQL_PORT": 3306
+        "MYSQL_PORT": 3306,
+
+        "JWT_KEY": "segredo"
     }
 }
