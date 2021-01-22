@@ -6,6 +6,8 @@ const app = express();
 const rotaProdutos = require('./routes/produtos');
 const rotaPedidos = require('./routes/pedidos');
 const rotaUsuarios = require('./routes/usuarios');
+const rotaRealtime = require('./routes/realtime');
+
 const bodyParser = require('body-parser');
 
 app.use(morgan('dev'));
@@ -31,6 +33,7 @@ app.use((req, res, next) => {
 app.use('/produtos', rotaProdutos);
 app.use('/pedidos', rotaPedidos);
 app.use('/usuarios', rotaUsuarios);
+app.use('/realtime', rotaRealtime);
 
 app.use((req, res, next) => {
     const erro = new Error('Não encontrado');
