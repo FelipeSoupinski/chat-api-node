@@ -10,19 +10,21 @@ const port = process.env.PORT || 3000;
 const server = http.createServer(app);
 const io = socket(server);
 
+const MessagesController = require('./controllers/messages-controller');
+
 app.set('views', path.join(__dirname, 'public'));
 app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
 
-let messages = [];
-
 io.on('connection', socket => {
     console.log(`Socket conectado: ${socket.id}`);
 
-    socket.emit('previousMessages', messages);
+    MessagesController.getMessages().then(data => {
+        socket.emit('previousMessages', data);
+    });
 
     socket.on('sendMessage', data => {
-        messages.push(data);
+        MessagesController.sendMessage(data);
         socket.broadcast.emit('receivedMessage', data);
     });
 })

@@ -15,15 +15,15 @@ firebase.initializeApp(firebaseConfig);
 
 exports.getRequest = (req, res) => {
     console.log("HTTP Get Request");
-    var userReference = firebase.database().ref("/Users/");
+    var messageReference = firebase.database().ref("/Messages/");
 
     //Attach an asynchronous callback to read the data
-    userReference.on(
+    messageReference.on(
         "value",
         function (snapshot) {
             console.log(snapshot.val());
             res.json(snapshot.val());
-            userReference.off("value");
+            messageReference.off("value");
         },
         function (errorObject) {
             console.log("The read failed: " + errorObject.code);
@@ -36,13 +36,12 @@ exports.putRequest = (req, res) => {
 
     console.log("HTTP Put Request");
 
-    var userName = req.body.UserName;
-    var name = req.body.Name;
-    var age = req.body.Age;
+    var author = req.body.UserName;
+    var message = req.body.Name;
 
-    var referencePath = '/Users/' + userName + '/';
-    var userReference = firebase.database().ref(referencePath);
-    userReference.set({ Name: name, Age: age },
+    var referencePath = '/Messages/';
+    var messageReference = firebase.database().ref(referencePath);
+    messageReference.set({ author, message },
         function (error) {
             if (error) {
                 res.send({ mensagem: "Data could not be saved.", error });
@@ -53,31 +52,35 @@ exports.putRequest = (req, res) => {
         });
 };
 
-//Update existing instance
-exports.postRequest = (req, res) => {
+exports.sendMessage = (messages) => {
+    var author = messages.author;
+    var message = messages.message;
 
-    console.log("HTTP POST Request");
-
-    var userName = req.body.UserName;
-    var name = req.body.Name;
-    var age = req.body.Age;
-
-    var referencePath = '/Users/' + userName + '/';
-    var userReference = firebase.database().ref(referencePath);
-    userReference.update({ Name: name, Age: age },
+    var referencePath = '/Messages/' + new Date().getTime() + '/';
+    var messageReference = firebase.database().ref(referencePath);
+    messageReference.set({ author, message },
         function (error) {
             if (error) {
-                res.send("Data could not be updated." + error);
+                console.log("Data could not be saved.", error);
             }
             else {
-                res.send("Data updated successfully.");
+                console.log("Data saved successfully.");
             }
         });
 };
 
-//Delete an instance
-exports.deleteRequest = (req, res) => {
+exports.getMessages = async () => {
+    var messageReference = firebase.database().ref("/Messages/");
+    var messages = {};
 
-    console.log("HTTP DELETE Request");
-    //todo
-};
+    await messageReference.on(
+        "value",
+        function (snapshot) {
+            messages = snapshot.val();
+        },
+        function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
+
+    return messages;
+}

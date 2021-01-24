@@ -24,18 +24,18 @@
     <script type="text/javascript">
         var socket = io('http://localhost:3000');
 
-        function renderMessage(message) {
-            $('.messages').append('<div class="message"><strong>'+ message.author +'</strong>: '+ message.message +'</div>');
+        function renderMessage(author, message) {
+            $('.messages').append('<div class="message"><strong>'+ author +'</strong>: '+ message +'</div>');
         }
 
         socket.on('receivedMessage', (message) => {
-            renderMessage(message);
+            renderMessage(message.author, message.message);
         });
 
         socket.on('previousMessages', (messages) => {
-            for (message of messages) {
-                renderMessage(message);
-            }
+            Object.keys(messages).forEach(function(item){
+                renderMessage(messages[item].author, messages[item].message);
+            });
         });
 
         $('#chat').submit((event) => {
@@ -50,10 +50,12 @@
                     message
                 };
 
-                renderMessage(messageObject);
+                renderMessage(messageObject.author, messageObject.message);
 
                 socket.emit('sendMessage', messageObject);
             }
+
+            $('input[name=message]').val("");
         });
     </script>
 </body>
